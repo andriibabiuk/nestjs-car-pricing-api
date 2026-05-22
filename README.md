@@ -1,98 +1,274 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚗 Vehicle Pricing & Estimation API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A scalable and production-ready RESTful API built with NestJS for estimating vehicle market prices and managing car sales reports.  
+The application includes authentication, role-based authorization, advanced validation, database migrations, and a custom vehicle valuation engine powered by dynamic queries.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## ✨ Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- 🔐 Cookie-based authentication & session management
+- 👤 Role-based access control (**Admin/User**)
+- 📊 Vehicle price estimation engine
+- 📝 Car sales report management
+- ✅ Request validation & response serialization
+- 🛡️ Protected routes with Guards & custom decorators
+- 🗄️ Automated database migrations with TypeORM
+- 🧪 Unit, Integration & E2E testing
+- ⚙️ Environment-based configuration support
 
-## Project setup
+---
 
-```bash
-$ npm install
+# 🧰 Tech Stack
+
+| Category       | Technology                             |
+| -------------- | -------------------------------------- |
+| Framework      | NestJS                                 |
+| Language       | TypeScript                             |
+| ORM            | TypeORM                                |
+| Database       | SQLite / PostgreSQL                    |
+| Validation     | `class-validator`, `class-transformer` |
+| Authentication | `cookie-session`                       |
+| Testing        | Jest                                   |
+| Configuration  | `@nestjs/config`                       |
+
+---
+
+# 🏗️ Project Architecture
+
+The application is divided into two main domain modules:
+
+---
+
+## 👥 Users Module (`UsersModule`)
+
+Responsible for authentication, authorization, and user management.
+
+### Core Features
+
+- User registration & login
+- Secure password hashing using `scrypt`
+- Session-based authentication with `cookie-session`
+- Custom `CurrentUser` decorator
+- Automatic user injection middleware
+- Protected routes using:
+  - `AuthGuard`
+  - `AdminGuard`
+
+### Authentication Flow
+
+```text
+Client → Auth Controller → Auth Service → Users Service → Database
 ```
 
-## Compile and run the project
+---
+
+## 🚘 Reports Module (`ReportsModule`)
+
+Handles vehicle reports and market value estimation.
+
+### Core Features
+
+- Submit vehicle sales reports
+- Approve/reject reports (Admin only)
+- Query-based valuation engine
+- Geolocation-aware price estimation
+
+### Vehicle Estimation Logic
+
+The API estimates a vehicle’s market value by:
+
+- Selecting only **approved reports**
+- Comparing vehicles within:
+  - ±3 years of manufacture
+  - ±5 degrees latitude/longitude
+- Taking the **top 3 closest matches**
+- Calculating the average market price
+
+---
+
+# 📦 Installation
+
+## 1. Clone Repository
 
 ```bash
-# development
-$ npm run start
+git clone https://github.com/andriibabiuk/nestjs-car-pricing-api.git
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cd nestjs-car-pricing-api
 ```
 
-## Run tests
+---
+
+## 2. Install Dependencies
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+# ⚙️ Environment Configuration
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Create environment configuration files in the project root:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+.env.development
+.env.test
+.env.production
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Example:
 
-## Resources
+```env
+DB_NAME=db.sqlite
 
-Check out a few resources that may come in handy when working with NestJS:
+COOKIE_KEY=your_secret_session_key
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+The application automatically selects the correct configuration file using:
 
-## Support
+```bash
+NODE_ENV
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+# ▶️ Running the Application
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Development Mode
 
-## License
+```bash
+NODE_ENV=development npm run start:dev
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Production Mode
+
+```bash
+npm run build
+
+NODE_ENV=production npm run start:prod
+```
+
+---
+
+# 🗄️ Database & Migrations
+
+The project uses a dynamic TypeORM configuration through:
+
+```bash
+ormconfig.js
+```
+
+### Migration Commands
+
+## Generate Migration
+
+```bash
+npm run migration:generate -- name_of_migration
+```
+
+## Run Migrations
+
+```bash
+npm run migration:run
+```
+
+## Revert Last Migration
+
+```bash
+npm run migration:revert
+```
+
+---
+
+# 🧪 Testing
+
+The project includes:
+
+- Unit Tests
+- Integration Tests
+- End-to-End (E2E) Tests
+
+A dedicated testing database is automatically initialized during test execution.
+
+## Run Unit Tests
+
+```bash
+npm run test
+```
+
+## Watch Mode
+
+```bash
+npm run test:watch
+```
+
+## Run E2E Tests
+
+```bash
+npm run test:e2e
+```
+
+---
+
+# 📡 API Endpoints
+
+# 🔐 Authentication
+
+| Method | Endpoint        | Description                    |
+| ------ | --------------- | ------------------------------ |
+| POST   | `/auth/signup`  | Register a new account         |
+| POST   | `/auth/signin`  | Authenticate user              |
+| POST   | `/auth/signout` | End current session            |
+| GET    | `/auth/whoami`  | Get current authenticated user |
+| GET    | `/auth/:id`     | Get user by ID                 |
+
+---
+
+# 🚗 Reports & Valuation
+
+| Method | Endpoint       | Description                        |
+| ------ | -------------- | ---------------------------------- |
+| POST   | `/reports`     | Create vehicle report              |
+| PATCH  | `/reports/:id` | Approve/reject report (Admin only) |
+| GET    | `/reports`     | Get estimated vehicle price        |
+
+### Estimation Query Parameters
+
+```bash
+make
+model
+year
+mileage
+lng
+lat
+```
+
+---
+
+# 📁 Project Structure
+
+```plaintext
+├── src/
+│   ├── guards/                  # Auth & Admin guards
+│   ├── interceptors/            # Serialization interceptors
+│   ├── reports/                 # Reports module
+│   ├── users/                   # Users & authentication module
+│   ├── app.module.ts            # Root application module
+│   └── main.ts                  # Application entry point
+│
+├── migrations/                  # Database migrations
+├── test/                        # E2E test suites
+├── ormconfig.js                 # Dynamic TypeORM config
+└── package.json
+```
+
+---
+
+# 🔒 Security
+
+- Password hashing using `scrypt`
+- Session-based authentication
+- Protected endpoints with Guards
+- DTO validation & sanitization
+- Serialized responses to prevent sensitive data leakage
